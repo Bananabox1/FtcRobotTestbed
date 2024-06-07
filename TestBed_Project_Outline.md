@@ -1,12 +1,12 @@
 ## Whitefield Robotics Team - Programming Tutorial
-Goals:
+### Goals:
 1.	Understand hardware platform and software infrastructure involved
 2.	Understand an OP mode, how they are written, how they are downloaded to the bot, and how they are executed
 3.	Understand the FTC SDK/JDK and the libraries available
 4.	Understand the structure of the existing robotics code
 5.	Understand what online documentation and other resources exist at First for programmers
    
-Outline:
+### Outline:
 1. Setup hardware and install necessary software
     1. Install Driver Station (DS) app on Android phone
     2. Install Rev hardware client on laptop
@@ -66,4 +66,8 @@ Outline:
 7. Inventory Resources for Learning Programming
     - [Programming Tutorial Contents](https://ftc-docs.firstinspires.org/en/latest/programming_resources/index.html)
 
-
+### Notes:
+1. 2024-2025 FTC
+      1. Theme: "Into the deep"
+      2. Reveal: September 7th
+ 
