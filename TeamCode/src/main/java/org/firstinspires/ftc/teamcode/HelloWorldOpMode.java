@@ -4,21 +4,17 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.vision.VisionPortal;
-
 @TeleOp
 public class HelloWorldOpMode extends LinearOpMode {
 
     private Servo servoTest;
-    private VisionPortal myVisionPortal;
+
     private double pos;
 
     @Override
     public void runOpMode() {
 
         servoTest = hardwareMap.get(Servo.class, "servoTest");
-        myVisionPortal = VisionPortal.easyCreateWithDefaults(hardwareMap.get(WebcamName.class, "Webcam 1"));
 
         pos = 0.5; // Initial position
 
