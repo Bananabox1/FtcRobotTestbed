@@ -25,7 +25,7 @@ public class TestbedHardware {
     // Instance variables
 
     // For accessing the calling OpMode for hardware initialization, etc.
-    private LinearOpMode myOpMode = null;
+    private LinearOpMode myOpMode;
 
     // Hardware components on TestBed
     private DcMotor leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive;  //  Motors for Mecanum drive
