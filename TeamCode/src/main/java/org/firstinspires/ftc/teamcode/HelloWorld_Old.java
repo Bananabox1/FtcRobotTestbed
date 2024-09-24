@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp
-public class HelloWorld_WXK extends LinearOpMode {
+public class HelloWorld_Old extends LinearOpMode {
 
     private Servo servoTest;
 
