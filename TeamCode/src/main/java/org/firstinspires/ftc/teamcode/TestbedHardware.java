@@ -28,7 +28,7 @@ public class TestbedHardware {
     // Instance variables
 
     // For accessing the calling OpMode for hardware initialization, etc.
-    private LinearOpMode myOpMode = null;
+    private LinearOpMode myOpMode;
 
     // Hardware components on TestBed
     private DcMotor leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive;  //  Motors for Mecanum drive
@@ -155,7 +155,7 @@ public class TestbedHardware {
         // Decimation = 3 ..  Detect 2" Tag from 4  feet away at 30 Frames Per Second
         // Decimation = 3 ..  Detect 5" Tag from 10 feet away at 30 Frames Per Second
         // Note: Decimation can be changed on-the-fly to adapt during a match.
-        aprilTag.setDecimation(2);
+        aprilTag.setDecimation(3);
 
         // Create the vision portal by using a builder.
         visionPortal = new VisionPortal.Builder()
