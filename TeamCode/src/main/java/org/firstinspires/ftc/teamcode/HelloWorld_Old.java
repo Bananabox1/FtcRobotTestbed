@@ -19,7 +19,7 @@ public class HelloWorldOpMode extends LinearOpMode {
         myVisionPortal = VisionPortal.easyCreateWithDefaults(hardwareMap.get(WebcamName.class, "Webcam 1"));
 =======
 @TeleOp
-public class HelloWorld_WXK extends LinearOpMode {
+public class HelloWorld_Old extends LinearOpMode {
 
     private Servo servoTest;
 
