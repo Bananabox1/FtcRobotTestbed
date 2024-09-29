@@ -34,10 +34,23 @@ public class TestbedHardware {
     private TouchSensor touchSensorTest; // Test touch sensor
     private DistanceSensor distanceSensorTest; // Test distance sensor
 
+    // Encoders (deadwheels) for odometry - not present on testbed but needed for sample code
+    private DcMotor encoderRight, encoderLeft, encoderAux;
+
     // Vision portal and AprilTag processor
     private VisionPortal visionPortal; // Used to manage the video source.
     private AprilTagProcessor aprilTag; // Used for managing the AprilTag detection processor */
     //private VisionProcessor colorDetect; // other vision processors as needed, e.g., custom VisionProcessor class
+
+    // Values for Motion functions
+    // ***** Adjustable Parameters *****
+    private final double DEADWHEEL_CM_PER_TICK = 0.65; // for odometry calculations
+    private final double LENGTH =1.4; //length B in cm
+
+    // Odometry counters
+    private int currentRightPosition;
+    private int currentLeftPosition;
+    private int currentAuxPosition;
 
     // Current robot vector (position on field and pose)
     private Position currentPosition;
@@ -202,6 +215,36 @@ public class TestbedHardware {
      */
     public List<AprilTagDetection> getAprilTagDetections() {
         return aprilTag.getDetections();
+    }
+
+    public void odometry() {
+        int oldRightPosition = currentRightPosition;
+        int oldLeftPosition = currentLeftPosition;
+        int oldAuxPosition = currentAuxPosition;
+
+        currentRightPosition = -encoderRight.getCurrentPosition();
+        currentLeftPosition = encoderLeft.getCurrentPosition();
+        currentAuxPosition = encoderAux.getCurrentPosition();
+
+        int dn1 = currentLeftPosition  - oldLeftPosition;
+        int dn2 = currentRightPosition - oldRightPosition;
+        int dn3 = currentAuxPosition - oldAuxPosition;
+
+        // the robot has moved and turned a tiny bit between two measurements:
+        double dtheta = DEADWHEEL_CM_PER_TICK * ((dn2-dn1) / (LENGTH));
+        double dx = DEADWHEEL_CM_PER_TICK * ((dn1+dn2) / 2.0);
+        double dy = DEADWHEEL_CM_PER_TICK * (dn3 + ((dn2-dn1) / 2.0));
+
+        //telemetrydx = dx;
+        //telemetrydy = dy;
+        //telemetrydh = dtheta;
+
+        // small movement of the robot gets added to the field coordinate system:
+        currentPosition.h += dtheta / 2;
+        currentPosition.x += dx * Math.cos(currentPosition.h) - dy * Math.sin(currentPosition.h);
+        currentPosition.y += dx * Math.sin(currentPosition.h) + dy * Math.cos(currentPosition.h);
+        currentPosition.h += dtheta / 2;
+        currentPosition.h = normDiff(currentPosition.h);
     }
 }
 
