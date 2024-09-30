@@ -151,10 +151,22 @@ public class MotionWithAprilTagCorrection extends LinearOpMode {
                 turn = -gamepad1.right_stick_x / 3.0;  // Reduce turn rate to 33%.
                 telemetry.addData("Manual", "Drive %5.2f, Strafe %5.2f, Turn %5.2f ", drive, strafe, turn);
             }
-            telemetry.update();
 
             // Apply desired axes motions to the drivetrain.
             robot.move(drive, strafe, turn);
+
+            // Update the encoder counts
+            int[] enc = robot.getCurrentEncoderValues();
+            telemetry.addData("Odometry", "%d, %d, %d, %d", enc[0], enc[1], enc[2], enc[3]);
+
+            // Set the servo position based on d-pad
+            if (gamepad1.dpad_left) {
+                robot.setServoPosition(robot.getServoPosition() - 0.01);
+            } else if (gamepad1.dpad_right) {
+                robot.setServoPosition(robot.getServoPosition() + 0.01);
+            }
+
+            telemetry.update();
             sleep(10);
         }
     }

@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -11,6 +9,7 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.vision.VisionPortal;
@@ -82,13 +81,19 @@ public class TestbedHardware {
         rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
 
         // If there are encoders connected, switch to RUN_USING_ENCODER mode for greater accuracy
-        // leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        // rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Define other hardware instant variables
         servoTest = myOpMode.hardwareMap.get(Servo.class, "servo_test");
         touchSensorTest = myOpMode.hardwareMap.get(TouchSensor.class, "touch_sensor");
         distanceSensorTest = myOpMode.hardwareMap.get(DistanceSensor.class, "distance_sensor");
+
+        // Initialize other hardware
+        servoTest.setPosition(0.5); // Initially center the servo position
+        servoTest.scaleRange(0, 1); // Set scale range based on any hardware installation limitations, alternatively could set a minimum and/or maximum position value
 
         myOpMode.telemetry.addData(">", "Hardware Initialized");
         myOpMode.telemetry.update();
@@ -130,6 +135,34 @@ public class TestbedHardware {
         rightBackDrive.setPower(rightBackPower);
     }
 
+    /**
+     * Get servo position
+     */
+    public double getServoPosition() {
+        return servoTest.getPosition();
+    }
+
+    /**
+     * Set servo position
+     */
+    public void setServoPosition(double pos) {
+        servoTest.setPosition(pos); // This could, e.g., be scaled here
+    }
+
+    /**
+     * Get the distance sensor reading
+     */
+    public double getDistance() {
+        return distanceSensorTest.getDistance(DistanceUnit.MM);
+    }
+
+    /**
+     * Get the touch sensor state
+     */
+    public boolean isTouchSensorPressed() {
+        return touchSensorTest.isPressed();
+    }
+
     // Methods for camera and AprilTag initialization, configuration, and processing
 
     /**
@@ -166,7 +199,7 @@ public class TestbedHardware {
 
         // Create the vision portal by using a builder.
         visionPortal = new VisionPortal.Builder()
-                .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
+                .setCamera(myOpMode.hardwareMap.get(WebcamName.class, "Webcam 1"))
                 .addProcessor(aprilTag)
                 .build();
     }
@@ -217,6 +250,20 @@ public class TestbedHardware {
         return aprilTag.getDetections();
     }
 
+    /**
+     * Return current encoder values from motors
+     */
+    public int[] getCurrentEncoderValues() {
+        int[] encVals = new int[4];
+
+        encVals[0] = leftFrontDrive.getCurrentPosition();
+        encVals[1] = rightFrontDrive.getCurrentPosition();
+        encVals[2] = leftBackDrive.getCurrentPosition();
+        encVals[3] = rightBackDrive.getCurrentPosition();
+
+        return encVals;
+    }
+
     public void odometry() {
         int oldRightPosition = currentRightPosition;
         int oldLeftPosition = currentLeftPosition;
@@ -240,11 +287,11 @@ public class TestbedHardware {
         //telemetrydh = dtheta;
 
         // small movement of the robot gets added to the field coordinate system:
-        currentPosition.h += dtheta / 2;
-        currentPosition.x += dx * Math.cos(currentPosition.h) - dy * Math.sin(currentPosition.h);
-        currentPosition.y += dx * Math.sin(currentPosition.h) + dy * Math.cos(currentPosition.h);
-        currentPosition.h += dtheta / 2;
-        currentPosition.h = normDiff(currentPosition.h);
+        //currentPosition.h += dtheta / 2;
+        //currentPosition.x += dx * Math.cos(currentPosition.h) - dy * Math.sin(currentPosition.h);
+        //currentPosition.y += dx * Math.sin(currentPosition.h) + dy * Math.cos(currentPosition.h);
+        //currentPosition.h += dtheta / 2;
+        //currentPosition.h = normDiff(currentPosition.h);
     }
 }
 
