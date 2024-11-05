@@ -49,7 +49,7 @@ import java.util.List;
  */
 
 @TeleOp(name="Omni Drive To AprilTag", group = "Test OpModes")
-public class MotionWithAprilTagCorrection extends LinearOpMode {
+public class ExerciseTestbedHardware extends LinearOpMode {
     // Adjust these numbers to suit your robot.
     final double DESIRED_DISTANCE = 12.0; //  this is how close the camera should get to the target (inches)
 

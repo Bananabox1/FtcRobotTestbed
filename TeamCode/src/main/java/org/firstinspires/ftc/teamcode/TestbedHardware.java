@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
@@ -10,8 +11,6 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
-import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -34,7 +33,7 @@ public class TestbedHardware {
     private DistanceSensor distanceSensorTest; // Test distance sensor
 
     // Encoders (deadwheels) for odometry - not present on testbed but needed for sample code
-    private DcMotor encoderRight, encoderLeft, encoderAux;
+    private DcMotorEx encoderRight, encoderLeft, encoderAux;
 
     // Vision portal and AprilTag processor
     private VisionPortal visionPortal; // Used to manage the video source.
@@ -51,9 +50,8 @@ public class TestbedHardware {
     private int currentLeftPosition;
     private int currentAuxPosition;
 
-    // Current robot vector (position on field and pose)
-    private Position currentPosition;
-    private Pose2D currentPose;
+    // Current robot vector (x, y, and Θ in field coordinates)
+    //private Pose2D currentPosition;
 
     // Define a constructor that allows the OpMode to pass a reference to itself.
     public TestbedHardware(LinearOpMode opmode) {
@@ -81,7 +79,7 @@ public class TestbedHardware {
         rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
 
         // If there are encoders connected, switch to RUN_USING_ENCODER mode for greater accuracy
-        //leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -264,35 +262,15 @@ public class TestbedHardware {
         return encVals;
     }
 
-    public void odometry() {
-        int oldRightPosition = currentRightPosition;
-        int oldLeftPosition = currentLeftPosition;
-        int oldAuxPosition = currentAuxPosition;
+    // Working code for autonomous navigation
+    public void moveToFieldPosition(double x, double y) {
 
-        currentRightPosition = -encoderRight.getCurrentPosition();
-        currentLeftPosition = encoderLeft.getCurrentPosition();
-        currentAuxPosition = encoderAux.getCurrentPosition();
-
-        int dn1 = currentLeftPosition  - oldLeftPosition;
-        int dn2 = currentRightPosition - oldRightPosition;
-        int dn3 = currentAuxPosition - oldAuxPosition;
-
-        // the robot has moved and turned a tiny bit between two measurements:
-        double dtheta = DEADWHEEL_CM_PER_TICK * ((dn2-dn1) / (LENGTH));
-        double dx = DEADWHEEL_CM_PER_TICK * ((dn1+dn2) / 2.0);
-        double dy = DEADWHEEL_CM_PER_TICK * (dn3 + ((dn2-dn1) / 2.0));
-
-        //telemetrydx = dx;
-        //telemetrydy = dy;
-        //telemetrydh = dtheta;
-
-        // small movement of the robot gets added to the field coordinate system:
-        //currentPosition.h += dtheta / 2;
-        //currentPosition.x += dx * Math.cos(currentPosition.h) - dy * Math.sin(currentPosition.h);
-        //currentPosition.y += dx * Math.sin(currentPosition.h) + dy * Math.cos(currentPosition.h);
-        //currentPosition.h += dtheta / 2;
-        //currentPosition.h = normDiff(currentPosition.h);
     }
+
+    public void setHeading(double theta) {
+
+    }
+
 }
 
 
