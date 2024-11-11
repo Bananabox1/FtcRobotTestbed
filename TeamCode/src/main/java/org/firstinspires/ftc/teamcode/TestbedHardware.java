@@ -182,7 +182,7 @@ public class TestbedHardware {
                 // == CAMERA CALIBRATION ==
                 // If you do not manually specify calibration parameters, the SDK will attempt
                 // to load a predefined calibration for your camera.
-                .setLensIntrinsics(1469.86, 1469.86, 612.825,366.546)
+                //.setLensIntrinsics(1469.86, 1469.86, 612.825,366.546)
 
                 .build();
 
