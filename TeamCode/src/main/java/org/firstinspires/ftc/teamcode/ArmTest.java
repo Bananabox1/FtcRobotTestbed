@@ -37,6 +37,7 @@ public class ArmTest extends OpMode
     private static final double CLAW_CLOSED_POSITION = 0.0;
 
     // Declare OpMode members.
+    private DcMotorEx rotationMotor;
     private DcMotorEx extensionMotor;
     private Servo gripperServo;
 
@@ -59,6 +60,12 @@ public class ArmTest extends OpMode
         extensionMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         extensionMotor.setDirection(DcMotorEx.Direction.REVERSE);
         //extensionMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        // NOTE: On the TestBed, use the one motor interface ("rightfront_drive") for the rotation
+        // motore so we don't have to change the hardware configuration from the Mecanum drive.
+        rotationMotor = hardwareMap.get(DcMotorEx.class, "rightfront_drive");
+        rotationMotor.setDirection(DcMotorEx.Direction.FORWARD);
+        rotationMotor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
         gripperServo = hardwareMap.get(Servo.class, "servo_test");
 
@@ -172,6 +179,9 @@ public class ArmTest extends OpMode
                 else
                     extensionMotor.setPower(0.0);
             }
+
+            // Right stick Y controls the arm rotation.
+            rotationMotor.setPower(gamepad1.right_stick_y);
 
             // store the gamepad state for the next loop
             lastGamepadState.copy(gamepad1);
